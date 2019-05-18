@@ -1,5 +1,4 @@
-//create array of card objects
-
+// Create an array cards.
 var cards = [
 	{
 		rank: "queen",
@@ -22,60 +21,59 @@ var cards = [
 		cardImage: "images/king-of-diamonds.png"
 	}
 ];
-
-// create empty array to store pushed cards
+// current player's hand
 var cardsInPlay = [];
-
-
-
-// creating function within the variable flipCard
-var flipCard = function () {
-	// get the attribute data-id from cardElement and store it in variable cardId. cardId = data-id.
-	var cardId = this.getAttribute('data-id');
-	// log user flipped and using cardId to reference cards array and referencing the key .rank.
-	console.log("User flipped " + cards[cardId].rank);
-	// pushing the string, the value of rank, into the cardInPlay array
-	cardsInPlay.push(cards[cardId].rank);
-	// displaying image and suit
-	console.log(cards[cardId].cardImage);
-	console.log(cards[cardId].suit);
-
-	// this = img, this sets the source attribute of the card that has been clicked, and puts the card image in 
-	this.setAttribute('src', cards[cardId].cardImage);
-	// time delay 400 milliseconds. if cardsInPlay equals 2, then run the checkForMatch function
-	setTimeout(function () {
-		if (cardsInPlay.length === 2) {
-			checkForMatch(cardId);
-		}
-	}, 400);
-}
-
+// function to store the steps to check for a match
 var checkForMatch = function () {
-	// creates condition if the first card flipped is the same as the second card that is flipped create alert
+	// check for match equality between the two cards
 	if (cardsInPlay[0] === cardsInPlay[1]) {
 		alert("You found a match!");
-		// if the cards are not the same run the below alert
 	} else {
 		alert("Sorry, try again.");
 	}
-}
+};
+/* function to store all steps when the user flips a card
+each card has click event listener
+*/
+var flipCard = function () {
+	// this keyword points to cardElement
+	var cardId = this.getAttribute('data-id');
+	console.log("User flipped " + cards[cardId].rank);
+	// push name of card ie: king 
+	cardsInPlay.push(cards[cardId].rank);
+	// when user flip both two cards
+	console.log(cards[cardId].cardImage);
+	console.log(cards[cardId].suit);
+	// current-card.setAttribute('attributeName', 'attributeValue');
+	// this = cardElement <img src="images/back.png" data-id="0">
+	// now set the img match with the cardImage "images/queen-of-diamonds.png"
+	this.setAttribute('src', cards[cardId].cardImage);
 
-
-// create DOM elements from cards array 
-var createBoard = function () {
-	//creating a loop on all cards
-	for (var i = 0; i < cards.length; i++) {
-		// creating a img element and storing in in variable cardElement
-		var cardElement = document.createElement('img');
-		// sets back of card img source to png file
-		cardElement.setAttribute('src', "images/back.png");
-		// giving each card a data id, starting at 0
-		cardElement.setAttribute('data-id', i);
-		// adding to each card an event listener, on click run flipCard function
-		cardElement.addEventListener('click', flipCard);
-		// find the element of Id 'game-board' and then adding cardElement to the game-board element
-		document.getElementById("game-board").appendChild(cardElement);
+	// checking to see if two cards have been played
+	if (cardsInPlay.length === 2) {
+		checkForMatch();
 	}
-}
-// calling the createBoard function
+};
+
+// create a new game board
+var createBoard = function () {
+	// Adding the Card Image and ID
+	for (var i = 0; i < cards.length; i++) {
+		// create <img>, cardElement is <img>
+		var cardElement = document.createElement('img');
+		// add a src attribute of "images/back.png" cardElement.setAttribute('attributeName', 'attributeValue');
+		// now cardElement is <img src="images/back.png">
+		cardElement.setAttribute('src', 'images/back.png');
+		// use the setAttribute() method on cardElement once again. Set the card's 'data-id' attribute to be the current index of the card array, i (no quotes). Now, we can track which card it is.
+		// data- attributes are meant to store data about an element that is not tied to a style.  now cardElement is <img src="images/back.png" data-id="0">
+		cardElement.setAttribute('data-id', i);
+		// when a user clicks on a card, the flipCard function is called.
+		cardElement.addEventListener('click', flipCard);
+		// Append the cardElement ( <img src="images/back.png" data-id="0"> )to the game board (which has an id of game-board). 
+		// <div id="game-board"> <img src="images/back.png" data-id="0"></div>
+		document.getElementById('game-board').appendChild(cardElement);
+	}
+};
+
+// run invoke the createBoard()
 createBoard();
